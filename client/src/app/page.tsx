@@ -1,3 +1,9 @@
+import { DraftMainPage } from "./components";
+
 export default function Home() {
-  return <div>HomePage</div>;
+  return (
+    <div>
+      <DraftMainPage />
+    </div>
+  );
 }
