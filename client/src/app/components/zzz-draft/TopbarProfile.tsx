@@ -48,6 +48,8 @@ const TopbarProfile = () => {
     };
   }, [open]);
 
+  console.log(user)
+
   return (
     <div className="relative flex items-center gap-3 cursor-pointer select-none">
       <div className="flex flex-col items-end leading-tight">
@@ -57,7 +59,7 @@ const TopbarProfile = () => {
               {user.username}
             </span>
             <span className="text-gray-400 text-xs">
-              #{user.discordId?.slice(0, 4)}
+              #{user.username}
             </span>
           </>
         )}
