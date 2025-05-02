@@ -71,6 +71,6 @@ export const logout = async (request, reply) => {
     if (err) {
       console.error("Ошибка выхода:", err);
     }
-    reply.redirect(`${process.env.FRONTEND_URL}/?authSuccess=false`);
+    reply.redirect("/");
   });
 };
