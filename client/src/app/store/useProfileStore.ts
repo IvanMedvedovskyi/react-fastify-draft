@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface DiscordUser {
+export interface DiscordUser {
   id: string;
   discordId: string;
   username: string;
