@@ -3,7 +3,6 @@
 import { SidebarMenu, useSectionStore } from '@/app/store'
 import React from 'react'
 
-// Массив кнопок
 const menuItems = [
     { id: 1, label: '🏠 Home', value: SidebarMenu.Home },
     { id: 2, label: '👤 Profile', value: SidebarMenu.Profile },
@@ -13,22 +12,27 @@ const menuItems = [
 ]
 
 const SideBar = () => {
-    const { setActiveSection } = useSectionStore()
+    const { activeSection, setActiveSection } = useSectionStore()
 
     return (
         <div>
             <aside className="w-64 bg-black p-4 flex flex-col justify-between shadow-lg min-h-screen">
                 <div>
                     <nav className="space-y-4">
-                        {menuItems.map(item => (
-                            <button
-                                key={item.id}
-                                onClick={() => setActiveSection(item.value)}
-                                className="cursor-pointer w-full text-left p-2 rounded bg-zinc-800 text-white hover:bg-lime-400 hover:text-black transition"
-                            >
-                                {item.label}
-                            </button>
-                        ))}
+                        {menuItems.map(item => {
+                            const isActive = activeSection === item.value
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setActiveSection(item.value)}
+                                    className={`cursor-pointer w-full text-left p-2 rounded transition
+                                        ${isActive ? 'bg-lime-400 text-black' : 'bg-zinc-800 text-white hover:bg-lime-400 hover:text-black'}
+                                    `}
+                                >
+                                    {item.label}
+                                </button>
+                            )
+                        })}
                     </nav>
                 </div>
             </aside>
