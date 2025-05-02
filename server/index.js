@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import dotenv from "dotenv";
+import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
 
@@ -10,13 +11,18 @@ dotenv.config();
 
 const app = Fastify();
 
+app.register(fastifyCors, {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+});
+
 app.register(fastifyCookie);
 
 app.register(fastifySession, {
   secret: process.env.SESSION_SECRET,
   cookie: {
     secure: false,
-    maxAge: 30 * 24 * 60 * 60 * 1000, 
+    maxAge: 30 * 24 * 60 * 60 * 1000,
   },
 });
 
