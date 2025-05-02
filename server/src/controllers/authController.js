@@ -47,6 +47,7 @@ export const discordCallback = async (request, reply) => {
   if (!user) {
     user = await prisma.user.create({
       data: {
+        discordId: userData.id,
         username: userData.username,
         globalName: userData.global_name,
         email: userData.email || null,
@@ -57,8 +58,9 @@ export const discordCallback = async (request, reply) => {
 
   request.session.user = {
     id: user.id,
+    discordId: user.discordId,
+    globalName: userData.global_name,
     username: user.username,
-    globalName: userData.globalName,
     email: user.email,
     avatar: user.avatar,
   };
