@@ -15,7 +15,7 @@ export const redirectToDiscord = async (request, reply) => {
 export const discordCallback = async (request, reply) => {
   const { code } = request.query;
   if (!code) {
-    return reply.code(400).send({ error: "Code is missing" });
+    return reply.redirect(`${process.env.FRONTEND_URL}`);
   }
 
   const params = new URLSearchParams();
@@ -63,7 +63,7 @@ export const discordCallback = async (request, reply) => {
     avatar: user.avatar,
   };
 
-  return reply.redirect(process.env.FRONTEND_URL);
+  return reply.redirect(`${process.env.FRONTEND_URL}/?authSuccess=true`);
 };
 
 export const logout = async (request, reply) => {
