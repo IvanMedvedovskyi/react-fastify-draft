@@ -63,7 +63,7 @@ export const discordCallback = async (request, reply) => {
     avatar: user.avatar,
   };
 
-  return reply.redirect("/profile");
+  return reply.redirect(process.env.FRONTEND_URL);
 };
 
 export const logout = async (request, reply) => {
