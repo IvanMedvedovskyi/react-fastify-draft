@@ -49,17 +49,19 @@ const TopbarProfile = () => {
       <div className="flex flex-col items-end leading-tight font-orbitron">
         {user && (
           <>
-            <span className="text-cyan-400 font-semibold text-sm tracking-wide uppercase">
+            <span className="text-[#b794f4] font-semibold text-sm tracking-widest uppercase drop-shadow-[0_0_4px_#805ad5aa]">
               {user.customName}
             </span>
-            <span className="text-gray-300 text-xs">#{user.username}</span>
+            <span className="text-gray-400 text-xs tracking-wide">
+              #{user.username}
+            </span>
           </>
         )}
       </div>
 
       {user && user.avatar && (
         <div
-          className="relative w-12 h-12 rounded-full overflow-hidden border-4 border-cyan-500 hover:border-cyan-400 transition-all duration-300 ease-in-out cursor-pointer"
+          className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#9f7aea] hover:border-[#b794f4] transition-all duration-300 ease-in-out cursor-pointer shadow-[0_0_10px_#9f7aea44]"
           onClick={() => setOpen((prev) => !prev)}
         >
           <img
@@ -76,11 +78,11 @@ const TopbarProfile = () => {
       {open && (
         <div
           ref={openModal}
-          className="absolute right-0 top-14 rounded-xl shadow-lg min-w-[150px] z-50 border border-cyan-400 backdrop-blur-xl"
+          className="absolute right-0 top-14 rounded-xl border border-[#9f7aea] bg-[#1b132c]/70 backdrop-blur-md shadow-2xl min-w-[160px] z-50 p-1"
         >
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 text-sm text-black bg-gradient-to-r from-cyan-500 to-blue-500 font-bold py-2 px-3 rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 font-orbitron uppercase tracking-wide"
+            className="w-full text-center text-sm text-white bg-gradient-to-r from-[#a78bfa] to-[#805ad5] hover:from-[#b794f4] hover:to-[#9f7aea] font-bold py-2 px-4 rounded-lg transition-all duration-300 font-orbitron uppercase tracking-wide shadow-[0_0_10px_#9f7aea44]"
           >
             Sign Out
           </button>

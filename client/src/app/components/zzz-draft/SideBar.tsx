@@ -2,20 +2,14 @@
 
 import React, { useEffect, useRef } from "react";
 import { SidebarMenu, useSectionStore } from "@/app/store";
-import {
-    Home,
-    User,
-    FlaskConical,
-    Trophy,
-    Settings,
-} from "lucide-react";
+import { Home, User, FlaskConical, Trophy, Settings } from "lucide-react";
 
 const menuItems = [
-    { id: 1, label: "Home", icon: <Home size={18} />, value: SidebarMenu.Home },
-    { id: 2, label: "Profile", icon: <User size={18} />, value: SidebarMenu.Profile },
-    { id: 3, label: "Drafts", icon: <FlaskConical size={18} />, value: SidebarMenu.Drafts },
-    { id: 4, label: "Tournaments", icon: <Trophy size={18} />, value: SidebarMenu.Tournaments },
-    { id: 5, label: "Draft Systems", icon: <Settings size={18} />, value: SidebarMenu.DraftSystems },
+    { id: 1, label: "HOME", icon: <Home size={20} />, value: SidebarMenu.Home },
+    { id: 2, label: "PROFILE", icon: <User size={20} />, value: SidebarMenu.Profile },
+    { id: 3, label: "DRAFTS", icon: <FlaskConical size={20} />, value: SidebarMenu.Drafts },
+    { id: 4, label: "TOURNAMENTS", icon: <Trophy size={20} />, value: SidebarMenu.Tournaments },
+    { id: 5, label: "DRAFT SYSTEMS", icon: <Settings size={20} />, value: SidebarMenu.DraftSystems },
 ];
 
 const SideBar = () => {
@@ -38,9 +32,9 @@ const SideBar = () => {
         const drops: number[] = Array(columns).fill(1);
 
         const draw = () => {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillStyle = "rgba(10, 10, 26, 0.08)";
             ctx.fillRect(0, 0, width, height);
-            ctx.fillStyle = "#0ff"; // Neon cyan color
+            ctx.fillStyle = "#bb9eff";
             ctx.font = `${fontSize}px monospace`;
 
             for (let i = 0; i < drops.length; i++) {
@@ -55,40 +49,54 @@ const SideBar = () => {
             }
         };
 
-        const interval = setInterval(draw, 50);
+        const interval = setInterval(draw, 60);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="relative min-w-[280px] max-w-[280px] bg-[#111111] p-4 flex flex-col justify-between shadow-lg min-h-screen overflow-hidden">
+        <div className="relative min-w-[280px] max-w-[280px] bg-[#120d1f] p-5 flex flex-col justify-between min-h-screen overflow-hidden shadow-xl border-r border-[#241b35]">
             <canvas
                 ref={canvasRef}
-                className="absolute top-0 left-0 w-full h-full opacity-20 z-0"
+                className="absolute top-0 left-0 w-full h-full opacity-10 z-0"
             />
 
-            <nav className="space-y-4 relative z-10">
+            <nav className="space-y-3 relative z-10">
                 {menuItems.map((item) => {
                     const isActive = activeSection === item.value;
                     return (
                         <button
                             key={item.id}
                             onClick={() => setActiveSection(item.value)}
-                            className={`cursor-pointer relative group w-full text-left px-4 py-3 rounded-xl transition-all duration-500 overflow-hidden
-                                ${isActive ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-black scale-105' : 'bg-zinc-800 text-white hover:bg-gradient-to-r hover:from-cyan-400 hover:to-blue-400 hover:text-black hover:scale-105 active:scale-95'}
-                                ${isActive ? 'glow-border' : ''}
+                            className={`
+                            w-full py-3 px-4 rounded-lg text-left font-semibold uppercase tracking-wide 
+                            flex items-center gap-3 relative z-10 overflow-hidden group transition-all duration-300
+                            transform-gpu will-change-transform
+                            ${isActive
+                                    ? "bg-gradient-to-r from-[#9f7aea] to-[#805ad5] text-white shadow-[0_0_15px_#9f7aea44] animate-pulse-slow"
+                                    : "bg-[#1a132d] hover:bg-[#261d3f] text-[#cbb9f8] hover:scale-[1.03] hover:shadow-[0_0_12px_#9f7aea33]"
+                                }
                             `}
                         >
-                            <span className="absolute inset-0 bg-[radial-gradient(circle,_rgba(0,255,255,0.1)_0%,_transparent_70%)] blur-2xl opacity-40 group-hover:opacity-60 transition" />
-                            <span className="relative z-10 flex items-center gap-3 font-orbitron uppercase tracking-wide">
-                                <span className="text-cyan-300">{item.icon}</span>
-                                <span className={`${isActive ? 'glitch' : ''}`}>{item.label}</span>
+                            <div className={`absolute inset-0 rounded-lg border transition-all duration-300 
+                            ${isActive
+                                    ? "border-[#bb9eff]"
+                                    : "border-transparent group-hover:border-[#6b46c1]"}`} />
+
+                            <span
+                                className={`
+                                    z-10 transition-all duration-300
+                                    ${isActive ? "text-white" : "group-hover:translate-x-1"}
+                                `}
+                            >
+                                {item.icon}
                             </span>
+                            <span className="z-10">{item.label}</span>
                         </button>
+
                     );
                 })}
             </nav>
         </div>
-
     );
 };
 

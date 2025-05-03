@@ -13,20 +13,20 @@ const TopBar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between bg-[#111111] p-5 relative z-10 shadow-lg">
-      <h1 className="text-3xl font-extrabold text-cyan-400 tracking-wider uppercase font-orbitron">
+    <div className="flex items-center justify-between bg-[#1a1529] p-4 px-6 shadow-md border-b border-[#2e2546]">
+      <h1 className="text-2xl font-bold text-[#c3baff] tracking-wider uppercase font-orbitron">
         ZZZ Draft
       </h1>
+
       {user ? (
         <TopbarProfile />
       ) : (
         <button
           onClick={handleLogin}
-          className="cursor-pointer relative group px-4 py-3 rounded-xl w-fit bg-gradient-to-r from-cyan-500 to-blue-500 text-black transition-all duration-500 glow-border overflow-hidden"
+          className="relative px-4 py-2 rounded-lg bg-[#2e2546] hover:bg-[#3b2f5a] text-[#e0d4ff] font-medium font-orbitron uppercase tracking-wider transition-colors duration-300 border border-[#443464]"
         >
-          <span className="absolute inset-0 bg-[radial-gradient(circle,_rgba(0,255,255,0.1)_0%,_transparent_70%)] blur-2xl opacity-40 group-hover:opacity-60 transition" />
-          <span className="relative z-10 flex items-center gap-2 font-orbitron uppercase tracking-wide">
-            <LogIn size={18} className="text-cyan-300" />
+          <span className="flex items-center gap-2">
+            <LogIn size={18} className="text-[#b19eff]" />
             Login / Register
           </span>
         </button>

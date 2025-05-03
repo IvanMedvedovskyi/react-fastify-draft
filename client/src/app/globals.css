@@ -1,31 +1,17 @@
 @import "tailwindcss";
 
-@keyframes glow {
-    0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
-    50% { box-shadow: 0 0 30px rgba(0, 255, 255, 1); }
+@keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
-  @keyframes glitch {
-    0% { transform: translate(0); opacity: 1; }
-    20% { transform: translate(-1px, 1px); opacity: 0.9; }
-    40% { transform: translate(1px, -1px); opacity: 1; }
-    60% { transform: translate(-2px, 2px); opacity: 0.95; }
-    80% { transform: translate(2px, -2px); opacity: 1; }
-    100% { transform: translate(0); opacity: 1; }
-  }
-  
-  /* Glow animation */
-  .glow-border {
-    animation: glow 2s infinite ease-in-out;
-  }
-  
-  /* Glitch effect */
-  .glitch {
-    animation: glitch 1s infinite;
-  }
-  
-  /* Orbitron font */
-  .font-orbitron {
-    font-family: 'Orbitron', sans-serif;
+  .animate-fade-in-up {
+    animation: fade-in-up 0.3s ease-out forwards;
   }
   
