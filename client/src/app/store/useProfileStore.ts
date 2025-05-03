@@ -7,6 +7,8 @@ export interface DiscordUser {
   avatar: string;
   email: string;
   createdAt: string;
+  globalName: string;
+  customName: string;
 }
 
 interface UserState {
