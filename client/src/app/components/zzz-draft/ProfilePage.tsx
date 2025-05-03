@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useUserStore } from "@/app/store";
+import { DiscordUser, useUserStore } from "@/app/store";
 import api from "@/app/api/axios";
 
 const ProfilePage = () => {
@@ -19,7 +19,12 @@ const ProfilePage = () => {
   const handleSave = async (userId?: string, customName?: string) => {
     try {
       const { data } = await api.put("/updateProfile", { userId, customName });
-      setUser(data.user);
+
+      const updatedUser: DiscordUser = {
+        ...user,
+        ...data.user,
+      };
+      setUser(updatedUser);
     } catch (error) {
       console.error(error);
     }
