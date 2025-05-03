@@ -7,7 +7,7 @@ import api from "@/app/api/axios";
 const ProfilePage = () => {
   const { user, setUser } = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [nameInput, setNameInput] = useState(user?.globalName || "");
+  const [nameInput, setNameInput] = useState(user?.customName || "");
 
   const avatarUrl =
     user?.avatar && user?.discordId
@@ -16,9 +16,9 @@ const ProfilePage = () => {
         }`
       : "/noProfPic.png";
 
-  const handleSave = async (userId?: string, globalName?: string) => {
+  const handleSave = async (userId?: string, customName?: string) => {
     try {
-      const { data } = await api.put("/updateProfile", { userId, globalName });
+      const { data } = await api.put("/updateProfile", { userId, customName });
       setUser(data.user);
     } catch (error) {
       console.error(error);
@@ -55,7 +55,7 @@ const ProfilePage = () => {
               <button
                 onClick={() => {
                   setIsEditing(false);
-                  setNameInput(user?.globalName || "");
+                  setNameInput(user?.customName || "");
                 }}
                 className="text-red-400 hover:text-red-300"
               >
@@ -65,7 +65,7 @@ const ProfilePage = () => {
           ) : (
             <>
               <h1 className="text-2xl font-bold">
-                {user?.globalName || "Unknown"}
+                {user?.customName || "Unknown"}
               </h1>
               <span
                 className="text-gray-400 cursor-pointer"

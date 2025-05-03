@@ -50,7 +50,7 @@ const TopbarProfile = () => {
         {user && (
           <>
             <span className="text-cyan-400 font-semibold text-sm tracking-wide uppercase">
-              {user.globalName}
+              {user.customName}
             </span>
             <span className="text-gray-300 text-xs">#{user.username}</span>
           </>
