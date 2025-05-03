@@ -5,23 +5,23 @@ import { useUserStore } from "@/app/store";
 import api from "@/app/api/axios";
 
 const ProfilePage = () => {
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
   const [nameInput, setNameInput] = useState(user?.globalName || "");
 
   const avatarUrl =
     user?.avatar && user?.discordId
-      ? `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.${user?.avatar.startsWith("a_") ? "gif" : "png"
-      }`
+      ? `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.${
+          user?.avatar.startsWith("a_") ? "gif" : "png"
+        }`
       : "/noProfPic.png";
 
   const handleSave = async (userId?: string, globalName?: string) => {
     try {
-      await api.put("/updateProfile", {
-        userId, globalName
-      });
+      const { data } = await api.put("/updateProfile", { userId, globalName });
+      setUser(data.user);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
     setIsEditing(false);
   };
@@ -47,7 +47,7 @@ const ProfilePage = () => {
                 className="bg-gray-800 border border-cyan-400 px-2 py-1 rounded-md text-white"
               />
               <button
-                onClick={() => handleSave(user?.id,nameInput)}
+                onClick={() => handleSave(user?.id, nameInput)}
                 className="text-cyan-400 hover:text-cyan-300"
               >
                 ✅
@@ -64,7 +64,9 @@ const ProfilePage = () => {
             </>
           ) : (
             <>
-              <h1 className="text-2xl font-bold">{user?.globalName || "Unknown"}</h1>
+              <h1 className="text-2xl font-bold">
+                {user?.globalName || "Unknown"}
+              </h1>
               <span
                 className="text-gray-400 cursor-pointer"
                 onClick={() => setIsEditing(true)}

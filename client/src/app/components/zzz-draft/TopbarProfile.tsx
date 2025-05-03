@@ -2,9 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import api from "@/app/api/axios";
 import { useUserStore } from "@/app/store";
-import { LogOut } from "lucide-react";
 
 const TopbarProfile = () => {
   const { user, clearUser } = useUserStore();
@@ -14,7 +12,6 @@ const TopbarProfile = () => {
 
   const handleLogout = async () => {
     try {
-      await api.get("/logout");
       clearUser();
       router.replace("/");
     } catch (error) {
@@ -85,7 +82,6 @@ const TopbarProfile = () => {
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 text-sm text-black bg-gradient-to-r from-cyan-500 to-blue-500 font-bold py-2 px-3 rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 font-orbitron uppercase tracking-wide"
           >
-            <LogOut size={16} className="text-cyan-300" />
             Sign Out
           </button>
         </div>
