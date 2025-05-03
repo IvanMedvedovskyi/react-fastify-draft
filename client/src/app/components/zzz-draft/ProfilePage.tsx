@@ -18,7 +18,8 @@ const ProfilePage = () => {
 
   const handleSave = async (userId?: string, customName?: string) => {
     try {
-      const { data } = await api.put("/updateProfile", { userId, customName });
+      await api.put("/updateProfile", { userId, customName });
+      const { data } = await api.get("/profile");
 
       const updatedUser: DiscordUser = {
         ...user,
@@ -30,6 +31,8 @@ const ProfilePage = () => {
     }
     setIsEditing(false);
   };
+
+  console.log(user);
 
   return (
     <div className="min-h-screen w-full bg-black text-white p-8">
