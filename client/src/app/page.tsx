@@ -1,9 +1,10 @@
+import { Suspense } from "react";
 import { DraftMainPage } from "./components";
 
 export default function Home() {
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       <DraftMainPage />
-    </div>
+    </Suspense>
   );
 }
