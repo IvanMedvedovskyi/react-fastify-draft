@@ -14,8 +14,8 @@ const TopBar = () => {
 
   return (
     <div className="flex items-center justify-between bg-[#1a1529] p-4 px-6 shadow-md border-b border-[#2e2546]">
-      <h1 className="text-2xl font-bold text-[#c3baff] tracking-wider uppercase font-orbitron">
-        ZZZ Draft
+      <h1 className="text-4xl font-bold text-[#c3baff] tracking-wider uppercase font-orbitron">
+        <i className="pl-5">ZZZ Draft</i>
       </h1>
 
       {user ? (

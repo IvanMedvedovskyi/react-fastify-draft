@@ -2,9 +2,11 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { ProfileHeader } from "./ProfileHeader";
+import { AgentModal } from "./AgentModal";
 
 const ProfilePage = () => {
   const [openDropdown, setOpenDropdown] = useState<null | "search" | "costs">(null);
+  const [isAgentModalOpen, setAgentModalOpen] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
   const costsRef = useRef<HTMLDivElement>(null);
@@ -103,9 +105,13 @@ const ProfilePage = () => {
               </div>
             ))}
         </div>
-        <button className="bg-[#1a1a2e] border border-[#805ad5] text-[#9f7aea] px-4 py-2 rounded-full font-bold hover:bg-[#2d2b45] transition-all">
+        <button
+          onClick={() => setAgentModalOpen(true)}
+          className="bg-[#1a1a2e] border border-[#805ad5] text-[#9f7aea] px-4 py-2 rounded-full font-bold hover:bg-[#2d2b45] transition-all"
+        >
           Manage agents
         </button>
+        <AgentModal isOpen={isAgentModalOpen} onClose={() => setAgentModalOpen(false)} />
       </div>
 
       {/* Engines section */}
