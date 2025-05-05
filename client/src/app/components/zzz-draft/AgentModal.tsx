@@ -117,30 +117,31 @@ const AgentModal: React.FC<AgentModalProps> = ({
         <div className="flex flex-1 overflow-hidden gap-6">
           {/* Agents grid */}
           <div className="flex-1 overflow-y-auto p-2">
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-7 gap-3">
               {characters.map((char) => {
                 const isSelected = selectedAgents.some((a) => a.id === char.id);
                 return (
                   <div
                     key={char.id}
                     onClick={() => handleOpenAgentSettings(char.id)}
-                    className={`rounded-xl p-4 flex flex-col items-center text-center cursor-pointer border transition-all hover:scale-105 hover:shadow-xl ${
+                    className={`relative rounded-lg overflow-hidden cursor-pointer group transition-all hover:scale-105 ${
                       isSelected
-                        ? "bg-[#292042] border-[#805ad5]"
-                        : "bg-[#333] border-[#444]"
+                        ? "border-2 border-yellow-400 bg-[#2f2f40]"
+                        : "border border-[#444] bg-[#222]"
                     }`}
+                    style={{ height: "130px" }} // <-- высота карточки больше
                   >
                     <Image
-                      src={char.icon}
+                      src={char.halfPortrait}
                       alt={char.en}
-                      width={72}
-                      height={72}
+                      width={300}
+                      height={300}
                       unoptimized
-                      className="rounded-md"
+                      className="w-full h-full object-cover" // полностью заполняет
                     />
-                    <span className="mt-2 text-sm font-semibold">
+                    <div className="absolute bottom-0 w-full bg-black/60 text-xs text-white py-1 text-center">
                       {char.en}
-                    </span>
+                    </div>
                   </div>
                 );
               })}
