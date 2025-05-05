@@ -1,4 +1,22 @@
-import { create } from 'zustand';
+import { create } from "zustand";
+
+export interface Character {
+  id: string;
+  code: string;
+  rank: number;
+  type: number;
+  element: number;
+  camp: number;
+  en: string;
+  ru: string;
+  portrait: string;
+  icon: string;
+  halfPortrait: string;
+  halfPortrait170: string;
+  iconHoyo: string;
+  createdAt: string;
+  mindscape: number;
+}
 
 export interface DiscordUser {
   id: string;
@@ -9,6 +27,7 @@ export interface DiscordUser {
   createdAt: string;
   globalName: string;
   customName: string;
+  characters: Character[];
 }
 
 interface UserState {

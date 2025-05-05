@@ -1,96 +1,96 @@
 "use client";
 
-import React, { useState } from "react";
-import { DiscordUser, useUserStore } from "@/app/store";
-import api from "@/app/api/axios";
+import React, { useEffect, useState } from "react";
+import { ProfileHeader } from "./ProfileHeader";
+import { AgentModal } from "./AgentModal";
+import Image from "next/image";
+import { useUserStore } from "@/app/store";
+
+type SelectedAgent = {
+  id: string;
+  level: number;
+  awakening: number;
+};
 
 const ProfilePage = () => {
-  const { user, setUser } = useUserStore();
-  const [isEditing, setIsEditing] = useState(false);
-  const [nameInput, setNameInput] = useState(user?.customName || "");
+  const [isAgentModalOpen, setAgentModalOpen] = useState(false);
+  const [savedAgents, setSavedAgents] = useState<SelectedAgent[]>([]);
+  const { user } = useUserStore();
 
-  const avatarUrl =
-    user?.avatar && user?.discordId
-      ? `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.${
-          user?.avatar.startsWith("a_") ? "gif" : "png"
-        }`
-      : "/noProfPic.png";
-
-  const handleSave = async (userId?: string, customName?: string) => {
-    try {
-      await api.put("/updateProfile", { userId, customName });
-      const { data } = await api.get("/profile");
-
-      const updatedUser: DiscordUser = {
-        ...user,
-        ...data.user,
-      };
-      setUser(updatedUser);
-    } catch (error) {
-      console.error(error);
-    }
-    setIsEditing(false);
+  const handleSaveAgents = (agents: SelectedAgent[]) => {
+    setSavedAgents(agents);
+    setAgentModalOpen(false);
   };
 
-  console.log(user);
+  useEffect(() => {
+    if (user?.characters.length) {
+      const mappedAgents = user.characters.map((char) => ({
+        id: char.id,
+        level: char.rank,
+        awakening: char.mindscape,
+      }));
+      setSavedAgents(mappedAgents);
+    }
+  }, [user]);
 
   return (
-    <div className="min-h-screen w-full bg-black text-white p-8">
-      <div className="flex items-center gap-4">
-        <img
-          src={avatarUrl}
-          alt="Profile"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/noProfPic.png";
-          }}
-          className="w-16 h-16 rounded-full object-cover"
+    <div className="min-h-screen w-full bg-[#0b0b11] text-white px-4 sm:px-6 py-10 font-orbitron">
+      <ProfileHeader />
+
+      <div className="mt-12">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-[#c5d0ff] tracking-widest uppercase">
+          Your Agents
+        </h2>
+
+        {user?.characters.length === 0 ? (
+          <p className="text-[#5c5f77] italic mb-6">No agents added yet.</p>
+        ) : (
+          <div className="flex flex-wrap gap-4 justify-start">
+            {user?.characters.map((char) => (
+              <div
+                key={char.id}
+                className="bg-gradient-to-br cursor-pointer from-[#1b1c2e] to-[#0f1020] rounded-xl p-2 w-[120px] flex-shrink-0 border border-[#3c3c5a] shadow-md hover:shadow-neon-blue transition-all relative group"
+              >
+                <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden mb-1 border border-[#3e3e4e]">
+                  <Image
+                    src={char.icon}
+                    alt={char.en}
+                    fill
+                    unoptimized
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <h3 className="text-center text-[#e3e6ff] text-[10px] font-semibold truncate drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]">
+                  {char.en}
+                </h3>
+
+                <div className="flex justify-center gap-1 mt-0.5 text-[12px]">
+                  <span className="bg-[#2d2f45] text-[#9ba2df] px-1.5 py-0.5 rounded-full shadow-inner">
+                    Lv. {char.rank}
+                  </span>
+                  <span className="bg-[#2d2f45] text-[#9ba2df] px-1.5 py-0.5 rounded-full shadow-inner">
+                    Awk. {char.mindscape}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <button
+          onClick={() => setAgentModalOpen(true)}
+          className="mt-6 cursor-pointer bg-[#1e2030] border border-[#4a4a6a] text-[#cfd3ff] px-5 py-2 rounded-md font-bold hover:bg-[#2a2c3a] hover:shadow-neon-blue transition-all"
+        >
+          Manage agents
+        </button>
+
+        <AgentModal
+          initialSelectedAgents={savedAgents}
+          isOpen={isAgentModalOpen}
+          onClose={() => setAgentModalOpen(false)}
+          onSave={handleSaveAgents}
         />
-        <div className="flex items-center gap-2">
-          {isEditing ? (
-            <>
-              <input
-                type="text"
-                value={nameInput}
-                onChange={(e) => setNameInput(e.target.value)}
-                className="bg-gray-800 border border-cyan-400 px-2 py-1 rounded-md text-white"
-              />
-              <button
-                onClick={() => handleSave(user?.id, nameInput)}
-                className="text-cyan-400 hover:text-cyan-300"
-              >
-                ✅
-              </button>
-              <button
-                onClick={() => {
-                  setIsEditing(false);
-                  setNameInput(user?.customName || "");
-                }}
-                className="text-red-400 hover:text-red-300"
-              >
-                ❌
-              </button>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl font-bold">
-                {user?.customName || "Unknown"}
-              </h1>
-              <span
-                className="text-gray-400 cursor-pointer"
-                onClick={() => setIsEditing(true)}
-              >
-                ✏️
-              </span>
-            </>
-          )}
-        </div>
       </div>
-
-      <div className="text-gray-400 text-sm mt-2">
-        Discord ID: {user?.username ? `#${user.username}` : "—"}
-      </div>
-
-      {/* Остальной контент */}
     </div>
   );
 };
