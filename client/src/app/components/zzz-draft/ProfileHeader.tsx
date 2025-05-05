@@ -84,7 +84,7 @@ const ProfileHeader = () => {
               </h1>
               <button
                 onClick={() => setIsEditing(true)}
-                className="text-[#bb9eff] hover:text-white transition-colors duration-200 p-1"
+                className="text-[#bb9eff] hover:text-white transition-colors duration-200 p-1 cursor-pointer"
               >
                 <Pencil size={16} strokeWidth={2} />
               </button>

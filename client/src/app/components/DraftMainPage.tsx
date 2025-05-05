@@ -16,7 +16,7 @@ import { useSearchParams } from "next/navigation";
 
 const DraftMainPage = () => {
   const { activeSection } = useSectionStore();
-  const { setUser } = useUserStore();
+  const { user, setUser } = useUserStore();
   const searchParams = useSearchParams();
 
   const fetchProfile = async () => {
