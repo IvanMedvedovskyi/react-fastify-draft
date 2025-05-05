@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { DiscordUser, useUserStore } from "@/app/store";
 import api from "@/app/api/axios";
-import { Pencil, Check, X } from "lucide-react";
+import { PencilIcon, CheckIcon, XIcon } from "lucide-react";
 
 const ProfileHeader = () => {
   const { user, setUser } = useUserStore();
@@ -65,7 +65,7 @@ const ProfileHeader = () => {
                 onClick={() => handleSave(user?.id, nameInput)}
                 className="text-[#bb9eff] hover:text-white transition-colors duration-200 p-1"
               >
-                <Check size={18} strokeWidth={2.5} />
+                <CheckIcon size={18} strokeWidth={2.5} />
               </button>
               <button
                 onClick={() => {
@@ -74,7 +74,7 @@ const ProfileHeader = () => {
                 }}
                 className="text-red-400 hover:text-red-300 transition-colors duration-200 p-1"
               >
-                <X size={18} strokeWidth={2.5} />
+                <XIcon size={18} strokeWidth={2.5} />
               </button>
             </>
           ) : (
@@ -86,7 +86,7 @@ const ProfileHeader = () => {
                 onClick={() => setIsEditing(true)}
                 className="text-[#bb9eff] hover:text-white transition-colors duration-200 p-1 cursor-pointer"
               >
-                <Pencil size={16} strokeWidth={2} />
+                <PencilIcon size={16} strokeWidth={2} />
               </button>
             </>
           )}
