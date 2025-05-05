@@ -1,137 +1,93 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { ProfileHeader } from "./ProfileHeader";
 import { AgentModal } from "./AgentModal";
+import Image from "next/image";
+import { useCharactersStore } from "@/app/store";
+
+type SelectedAgent = {
+  id: string;
+  level: number;
+  awakening: number;
+};
 
 const ProfilePage = () => {
-  const [openDropdown, setOpenDropdown] = useState<null | "search" | "costs">(null);
   const [isAgentModalOpen, setAgentModalOpen] = useState(false);
+  const [savedAgents, setSavedAgents] = useState<SelectedAgent[]>([]);
+  const { characters } = useCharactersStore();
 
-  const searchRef = useRef<HTMLDivElement>(null);
-  const costsRef = useRef<HTMLDivElement>(null);
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      searchRef.current &&
-      !searchRef.current.contains(e.target as Node) &&
-      costsRef.current &&
-      !costsRef.current.contains(e.target as Node)
-    ) {
-      setOpenDropdown(null);
-    }
+  const handleSaveAgents = (agents: SelectedAgent[]) => {
+    setSavedAgents(agents);
+    setAgentModalOpen(false);
   };
 
-  useEffect(() => {
-    if (openDropdown) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openDropdown]);
+  const getCharacter = (id: string) => characters.find((char) => char.id === id);
 
   return (
-    <div className="min-h-screen w-full bg-[#0b0c10] text-white p-8 font-orbitron relative">
+    <div className="min-h-screen w-full bg-[#0b0b11] text-white px-4 sm:px-6 py-10 font-orbitron">
       <ProfileHeader />
 
-      {/* Top buttons with dropdowns */}
-      <div className="flex justify-end mt-6 gap-4 relative">
-        {/* Search profile dropdown */}
-        <div ref={searchRef} className="relative">
-          <button
-            onClick={() => setOpenDropdown((prev) => (prev === "search" ? null : "search"))}
-            className="bg-gradient-to-r from-[#805ad5] to-[#6b46c1] hover:from-[#9f7aea] hover:to-[#805ad5] text-white px-5 py-2 rounded-full text-sm font-bold tracking-widest shadow-[0_0_10px_#805ad5aa] transition-all duration-300"
-          >
-            Search profile ⌄
-          </button>
-
-          {openDropdown === "search" && (
-            <div className="absolute right-0 mt-2 w-64 bg-[#1a1a2e] border border-[#805ad5] rounded-xl shadow-lg p-4 animate-fade-in-up z-50">
-              <p className="text-sm text-gray-300 mb-2">Enter username:</p>
-              <input
-                type="text"
-                placeholder="Type here..."
-                className="w-full px-3 py-2 rounded-md bg-black border border-[#805ad5] text-white focus:outline-none focus:ring-2 focus:ring-[#9f7aea]"
-              />
-              <button className="mt-3 w-full bg-gradient-to-r from-[#9f7aea] to-[#6b46c1] text-white py-2 rounded-md font-bold hover:opacity-90 transition">
-                Search
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Calculate costs dropdown */}
-        <div ref={costsRef} className="relative">
-          <button
-            onClick={() => setOpenDropdown((prev) => (prev === "costs" ? null : "costs"))}
-            className="bg-gradient-to-r from-[#805ad5] to-[#6b46c1] hover:from-[#9f7aea] hover:to-[#805ad5] text-white px-5 py-2 rounded-full text-sm font-bold tracking-widest shadow-[0_0_10px_#805ad5aa] transition-all duration-300"
-          >
-            Calculate costs ⌄
-          </button>
-
-          {openDropdown === "costs" && (
-            <div className="absolute right-0 mt-2 w-64 bg-[#1a1a2e] border border-[#805ad5] rounded-xl shadow-lg p-4 animate-fade-in-up z-50">
-              <p className="text-sm text-gray-300 mb-2">Enter agent count:</p>
-              <input
-                type="number"
-                className="w-full px-3 py-2 rounded-md bg-black border border-[#805ad5] text-white focus:outline-none focus:ring-2 focus:ring-[#9f7aea]"
-              />
-              <button className="mt-3 w-full bg-gradient-to-r from-[#9f7aea] to-[#6b46c1] text-white py-2 rounded-md font-bold hover:opacity-90 transition">
-                Calculate
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Speedrun button */}
-        <button className="bg-gradient-to-r from-[#805ad5] to-[#6b46c1] hover:from-[#9f7aea] hover:to-[#805ad5] text-white px-5 py-2 rounded-full text-sm font-bold tracking-widest shadow-[0_0_10px_#805ad5aa] transition-all duration-300">
-          Speedrun calc
-        </button>
-      </div>
-
-      {/* Agents section */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-[#9f7aea]">Agents</h2>
-        <div className="flex gap-4 mb-6">
-          {Array(9)
-            .fill(0)
-            .map((_, idx) => (
-              <div
-                key={`agent-${idx}`}
-                className="w-10 h-10 rounded-full bg-[#1a1a2e] flex items-center justify-center opacity-60 border border-[#805ad5] hover:opacity-100 hover:scale-105 transition-transform"
-              >
-                <span className="text-[#9f7aea]">🛡</span>
-              </div>
-            ))}
-        </div>
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-[#c5d0ff] tracking-widest uppercase">
+          Your Agents
+        </h2>
+
+        {savedAgents.length === 0 ? (
+          <p className="text-[#5c5f77] italic mb-6">No agents added yet.</p>
+        ) : (
+          <div className="flex flex-wrap gap-4 justify-start">
+            {savedAgents.map((agent, idx) => {
+              const char = getCharacter(agent.id);
+              if (!char) return null;
+
+              return (
+                <div
+                  key={idx}
+                  className="bg-gradient-to-br from-[#1b1c2e] to-[#0f1020] rounded-xl p-2 w-[120px] flex-shrink-0 border border-[#3c3c5a] shadow-md hover:shadow-neon-blue transition-all relative group"
+                >
+                  <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden mb-1 border border-[#3e3e4e]">
+                    <Image
+                      src={char.icon}
+                      alt={char.en}
+                      fill
+                      unoptimized
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+
+                  <h3 className="text-center text-[#e3e6ff] text-[10px] font-semibold truncate drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]">
+                    {char.en}
+                  </h3>
+
+                  <div className="flex justify-center gap-1 mt-0.5 text-[12px]">
+                    <span className="bg-[#2d2f45] text-[#9ba2df] px-1.5 py-0.5 rounded-full shadow-inner">
+                      Lv. {agent.level}
+                    </span>
+                    <span className="bg-[#2d2f45] text-[#9ba2df] px-1.5 py-0.5 rounded-full shadow-inner">
+                      Awk. {agent.awakening}
+                    </span>
+                  </div>
+
+                  <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-[#7c90ff] transition-all pointer-events-none" />
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <button
           onClick={() => setAgentModalOpen(true)}
-          className="bg-[#1a1a2e] border border-[#805ad5] text-[#9f7aea] px-4 py-2 rounded-full font-bold hover:bg-[#2d2b45] transition-all"
+          className="mt-6 bg-[#1e2030] border border-[#4a4a6a] text-[#cfd3ff] px-5 py-2 rounded-md font-bold hover:bg-[#2a2c3a] hover:shadow-neon-blue transition-all"
         >
           Manage agents
         </button>
-        <AgentModal isOpen={isAgentModalOpen} onClose={() => setAgentModalOpen(false)} />
-      </div>
 
-      {/* Engines section */}
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-[#9f7aea]">Engines</h2>
-        <div className="flex gap-4 mb-6">
-          {Array(5)
-            .fill(0)
-            .map((_, idx) => (
-              <div
-                key={`engine-${idx}`}
-                className="w-10 h-10 rounded-full bg-[#1a1a2e] flex items-center justify-center opacity-60 border border-[#805ad5] hover:opacity-100 hover:scale-105 transition-transform"
-              >
-                <span className="text-[#9f7aea]">⚙️</span>
-              </div>
-            ))}
-        </div>
-        <button className="bg-[#1a1a2e] border border-[#805ad5] text-[#9f7aea] px-4 py-2 rounded-full font-bold hover:bg-[#2d2b45] transition-all">
-          Manage engines
-        </button>
+        <AgentModal
+          isOpen={isAgentModalOpen}
+          onClose={() => setAgentModalOpen(false)}
+          onSave={handleSaveAgents}
+        />
       </div>
     </div>
   );
